@@ -32,4 +32,7 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Build Forge Mod with Gradle
-      run: ./gradle build
+      uses: gradle/gradle-build-action@v2.3.3
+      with:
+          arguments: build
+          build-root-directory: ./forge
