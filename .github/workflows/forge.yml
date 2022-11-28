@@ -18,7 +18,7 @@ defaults:
     working-directory: forge
 
 permissions:
-  contents: read|write
+  contents: write
 
 jobs:
   build:
