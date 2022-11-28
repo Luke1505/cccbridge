@@ -35,4 +35,4 @@ jobs:
       uses: gradle/gradle-build-action@v2.3.3
       with:
           arguments: build
-          build-root-directory: ./forge
+          build-root-directory: ./forge/
