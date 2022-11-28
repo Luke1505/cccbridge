@@ -35,30 +35,3 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build --gradle-version=7.5.1
-    - name: Upload to CurseForge
-      # You may pin to the exact commit or the version.
-      # uses: itsmeow/curseforge-upload@78269efea1104bd4407d6a2f2b9ffe15bbcdb30d
-      uses: itsmeow/curseforge-upload@3.1.1
-      with:
-        # Token used to authenticate with CurseForge API. Use a repository secret for this.
-        token: 
-        # Project id (numerical) to upload file to. You can get the numerical ID from the sidebar on a project page.
-        project_id: 
-        # The subdomain of curseforge.com where the upload request will be made. (minecraft, kerbal, etc.)
-        game_endpoint: 
-        # The path to the file you want to upload
-        file_path: 
-        # The changelog text to put on the file.
-        changelog: # optional
-        # The type of the changelog. Allowed values: "text", "html" (aka. WYSIWYG), "markdown".
-        changelog_type: # optional
-        # The display name for this file. Defaults to the filename.
-        display_name: # optional
-        # The id of the parent file to put this file under. Defaults to none. (IDs are integers)
-        parent_file_id: # optional
-        # The game version IDs to select on this file. Separate IDs with "," (no quotes). See README for more info.
-        game_versions: # optional
-        # The type of this release. Allowed values: "alpha", "beta", "release".
-        release_type: # optional
-        # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
-        relations: # optional
