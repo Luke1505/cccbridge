@@ -21,8 +21,9 @@ public class PeripheralProvider implements IPeripheralProvider {
             return LazyOptional.of(() -> new TrainPeripheral(pos, world));
         } else if (world.getBlockEntity(pos) instanceof SpeedControllerTileEntity) {
             return LazyOptional.of(() -> new SpeedControllerPeripheral(pos, world));
+        } else if (world.getBlockEntity(pos) instanceof SignalTileEntity) {
+            return LazyOptional.of(() -> new TrainSignalPeripheral(pos, world));
         }
-
         return LazyOptional.empty();
     }
 }
