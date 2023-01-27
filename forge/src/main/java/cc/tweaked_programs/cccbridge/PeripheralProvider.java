@@ -2,7 +2,9 @@ package cc.tweaked_programs.cccbridge;
 
 import cc.tweaked_programs.cccbridge.peripherals.SpeedControllerPeripheral;
 import cc.tweaked_programs.cccbridge.peripherals.TrainPeripheral;
+import cc.tweaked_programs.cccbridge.peripherals.TrainSignalPeripheral;
 import com.simibubi.create.content.contraptions.relays.advanced.SpeedControllerTileEntity;
+import com.simibubi.create.content.logistics.trains.management.edgePoint.signal.SignalTileEntity;
 import com.simibubi.create.content.logistics.trains.management.edgePoint.station.StationTileEntity;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;

@@ -28,7 +28,6 @@ import java.util.UUID;
 
 public class TrainPeripheral implements IPeripheral {
     private static Schedule schedule;
-    private final List<IComputerAccess> connectedComputers = new ArrayList<>();
     private final Level level;
     private final StationTileEntity station;
 
@@ -108,8 +107,11 @@ public class TrainPeripheral implements IPeripheral {
      * @return Name of train.
      */
     @LuaFunction
-    public final String getTrainName() {
-        return Objects.requireNonNull(station.getStation().getPresentTrain()).name.getString();
+    public final MethodResult getTrainName() {
+        if (station.getStation().getPresentTrain() == null) {
+            return MethodResult.of(false, "There is no train to get the name of");
+        }
+        return MethodResult.of(true, Objects.requireNonNull(station.getStation().getPresentTrain()).name.getContents());
     }
 
     /**
