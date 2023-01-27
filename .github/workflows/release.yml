@@ -16,6 +16,13 @@ jobs:
           sed -i mod_version=$MOD_VERSION ./forge/gradle.properties 
           sed -i version=$MOD_VERSION ./forge/src/main/resources/META-INF/mods.toml
 
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -32,6 +39,7 @@ jobs:
         cd ../fabric
         gradle build
   
+
     - name: Publish Release
       uses: actions/create-release@v1
       env:
@@ -41,4 +49,5 @@ jobs:
         release_name: Release v${{ env.version }}
         draft: false
         prerelease: false
+
 
