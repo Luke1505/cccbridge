@@ -1,0 +1,44 @@
+name: Build and Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    env:
+      MOD_VERSION: ""
+    steps:
+    - name: Write to Files
+      run: |
+          echo $(tr -dc '0-9' <<< ${GITHUB_RED:2}) > $MOD_VERSION
+          sed -i mod_version=$MOD_VERSION ./forge/gradle.properties 
+          sed -i version=$MOD_VERSION ./forge/src/main/resources/META-INF/mods.toml
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: 18
+        distribution: 'temurin'
+    
+    - name: Build project
+      run: |
+        cd ./forge
+        gradle build
+        cd ../fabric
+        gradle build
+  
+    - name: Publish Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.version }}
+        release_name: Release v${{ env.version }}
+        draft: false
+        prerelease: false
+
