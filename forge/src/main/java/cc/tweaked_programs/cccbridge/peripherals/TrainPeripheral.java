@@ -25,7 +25,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-
+/**
+ * This peripheral is provided for the Train Station from Create. It is used to get general data of it and its trains and give some control over it too.
+ *
+ * @version 1.0
+ */
 public class TrainPeripheral implements IPeripheral {
     private static Schedule schedule;
     private final Level level;
@@ -197,4 +201,3 @@ public class TrainPeripheral implements IPeripheral {
         return this == iPeripheral;
     }
 }
-

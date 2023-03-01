@@ -19,13 +19,21 @@ public class PeripheralProvider implements IPeripheralProvider {
     @NotNull
     @Override
     public LazyOptional<IPeripheral> getPeripheral(@NotNull Level world, @NotNull BlockPos pos, @NotNull Direction side) {
-        if (world.getBlockEntity(pos) instanceof StationTileEntity) {
+        BlockEntity block = world.getBlockEntity(pos);
+
+        if (block instanceof StationTileEntity)
             return LazyOptional.of(() -> new TrainPeripheral(pos, world));
+
+        else if (block instanceof PeripheralBlockEntity peripheralBlock) {
+            IPeripheral peripheral = peripheralBlock.getPeripheral(side);
+            if (peripheral != null)
+                LazyOptional.of(() -> peripheral);
         } else if (world.getBlockEntity(pos) instanceof SpeedControllerTileEntity) {
             return LazyOptional.of(() -> new SpeedControllerPeripheral(pos, world));
         } else if (world.getBlockEntity(pos) instanceof SignalTileEntity) {
             return LazyOptional.of(() -> new TrainSignalPeripheral(pos, world));
         }
+
         return LazyOptional.empty();
     }
 }
