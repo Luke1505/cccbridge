@@ -3,6 +3,7 @@
   "package": "cc.tweaked_programs.cccbridge.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
+    "MixinSignalTileEntity",
     "MixinStationTileEntity"
   ],
   "injectors": {

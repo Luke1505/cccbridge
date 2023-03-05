@@ -8,6 +8,7 @@ import com.simibubi.create.content.logistics.trains.management.edgePoint.station
 import com.simibubi.create.content.logistics.trains.management.edgePoint.station.StationTileEntity;
 import com.simibubi.create.content.logistics.trains.management.edgePoint.station.TrainEditPacket.TrainEditReturnPacket;
 import com.simibubi.create.content.logistics.trains.management.schedule.Schedule;
+import com.simibubi.create.content.logistics.trains.management.schedule.ScheduleEntry;
 import com.simibubi.create.foundation.networking.AllPackets;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.lua.MethodResult;
@@ -192,6 +193,36 @@ public class TrainStationPeripheral implements IPeripheral {
     @LuaFunction
     public final void clearSchedule() {
         schedule = null;
+    }
+
+    @LuaFunction
+    public final MethodResult getSchedule() {
+        if (station.getStation().getPresentTrain() == null) {
+            return MethodResult.of(false, "No train present");
+        }
+        if (station.getStation().getPresentTrain().runtime.getSchedule() == null) {
+            return MethodResult.of(false, "No schedule found");
+        }
+        List<List<Object>> schedule = new ArrayList<>();
+        for (ScheduleEntry entry : station.getStation().getPresentTrain().runtime.getSchedule().entries) {
+            List<Object> list = new ArrayList<>();
+            list.add(entry.conditions);
+            list.add(entry.instruction);
+            schedule.add(list);
+        }
+        return MethodResult.of(true, schedule);
+    }
+
+    @LuaFunction
+    public final MethodResult setSchedule(List<List<Object>> schedule) {
+        if (station.getStation().getPresentTrain() == null) {
+            return MethodResult.of(false, "No train present");
+        }
+        if (schedule == null) {
+            return MethodResult.of(false, "No schedule found");
+        }
+        // TODO: Convert List<List<Object>> to Schedule and set it.
+        return MethodResult.of(false, "Not implemented yet");
     }
 
     @LuaFunction
