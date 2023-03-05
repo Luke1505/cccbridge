@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "cc.tweaked_programs.cccbridge.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "client": [
+    "MixinStationTileEntity"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "mixin-refmap.cccbridge.json"
+}

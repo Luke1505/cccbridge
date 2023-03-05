@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RedRouterBlockEntity extends BlockEntity implements PeripheralBlockEntity {
+public class RedRouterBlockEntity extends BlockEntity implements IPeripheralBlockEntity {
     private final HashMap<String, Integer> outputDir = new HashMap<>();
     private final HashMap<String, Integer> inputDir = new HashMap<>();
     private boolean blockupdate = false;

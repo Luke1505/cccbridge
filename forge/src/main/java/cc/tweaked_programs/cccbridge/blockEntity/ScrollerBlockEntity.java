@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ScrollerBlockEntity extends SmartTileEntity implements PeripheralBlockEntity {
+public class ScrollerBlockEntity extends SmartTileEntity implements IPeripheralBlockEntity {
     private ScrollerBlockPeripheral peripheral;
     private boolean locked = false;
     private boolean updateLock = false;
@@ -32,26 +32,6 @@ public class ScrollerBlockEntity extends SmartTileEntity implements PeripheralBl
 
     public ScrollerBlockEntity(BlockPos pos, BlockState state) {
         super(BlockRegister.SCROLLER_BLOCK_ENTITY.get(), pos, state);
-    }
-
-    public IPeripheral getPeripheral(Direction side) {
-        if (side == this.getBlockState().getValue(BlockStateProperties.FACING).getOpposite()) {
-            if (peripheral == null)
-                peripheral = new ScrollerBlockPeripheral(this, this.getLevel());
-            return peripheral;
-        }
-        return null;
-    }
-
-    public void setLock(boolean state) { locked = state; updateLock = true; }
-    public void playTickSound() { playTickSound = true; }
-
-    @Nullable
-    public ScrollValueBehaviour getBehaviour() {
-        TileEntityBehaviour behaviour = getBehaviour(ScrollValueBehaviour.TYPE);
-        if (behaviour instanceof ScrollValueBehaviour scrollValueBehaviour)
-            return scrollValueBehaviour;
-        return null;
     }
 
     public static void tick(Level world, BlockPos blockPos, BlockState state, BlockEntity be) {
@@ -83,21 +63,49 @@ public class ScrollerBlockEntity extends SmartTileEntity implements PeripheralBl
         scroller.tick();
     }
 
+    public IPeripheral getPeripheral(Direction side) {
+        if (side == this.getBlockState().getValue(BlockStateProperties.FACING).getOpposite()) {
+            if (peripheral == null)
+                peripheral = new ScrollerBlockPeripheral(this, this.getLevel());
+            return peripheral;
+        }
+        return null;
+    }
+
+    public void setLock(boolean state) {
+        locked = state;
+        updateLock = true;
+    }
+
+    public void playTickSound() {
+        playTickSound = true;
+    }
+
+    @Nullable
+    public ScrollValueBehaviour getBehaviour() {
+        TileEntityBehaviour behaviour = getBehaviour(ScrollValueBehaviour.TYPE);
+        if (behaviour instanceof ScrollValueBehaviour scrollValueBehaviour)
+            return scrollValueBehaviour;
+        return null;
+    }
+
     @Override
     public void addBehaviours(List<TileEntityBehaviour> behaviours) {
         ScrollValueBehaviour scroller = new ScrollValueBehaviour(this.getBlockState().getBlock().getName(), this, new ControllerValueBoxTransform())
                 .between(-150, 150)
                 .moveText(new Vec3(9, 0, 10))
                 .withUnit(i -> MutableComponent.create(new TranslatableContents("cccbridge.general.unit.scroller")))
-                .withCallback(i -> { if (this.peripheral != null) peripheral.newValue(i); })
+                .withCallback(i -> {
+                    if (this.peripheral != null) peripheral.newValue(i);
+                })
                 .onlyActiveWhen(() -> !(this.getLevel().getBlockState(this.getBlockPos()).getValue(BlockStateProperties.LOCKED)))
                 .withStepFunction(context -> context.shift ? 1 : 10)
                 .withFormatter(i -> {
                     StringBuilder number = new StringBuilder(String.valueOf(i));
                     if (i <= -10 || i >= 10)
-                        number.insert(number.length()-1,'.');
+                        number.insert(number.length() - 1, '.');
                     else
-                        number.insert( (i>=0) ? 0 : 1, "0.");
+                        number.insert((i >= 0) ? 0 : 1, "0.");
                     return number.toString();
                 });
         scroller.value = 0;
@@ -112,7 +120,9 @@ public class ScrollerBlockEntity extends SmartTileEntity implements PeripheralBl
         }
 
         @Override
-        protected boolean isSideActive(BlockState state, Direction direction) { return state.getValue(BlockStateProperties.FACING) == direction; }
+        protected boolean isSideActive(BlockState state, Direction direction) {
+            return state.getValue(BlockStateProperties.FACING) == direction;
+        }
 
         @Override
         protected float getScale() {

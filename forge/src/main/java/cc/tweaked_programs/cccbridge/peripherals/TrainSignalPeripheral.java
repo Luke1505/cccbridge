@@ -1,11 +1,9 @@
 package cc.tweaked_programs.cccbridge.peripherals;
 
 import com.simibubi.create.content.logistics.trains.management.edgePoint.signal.SignalTileEntity;
-import com.simibubi.create.content.logistics.trains.management.edgePoint.station.StationTileEntity;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.lua.MethodResult;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,17 +12,22 @@ public class TrainSignalPeripheral implements IPeripheral {
     private final SignalTileEntity signal;
     private final Level level;
 
-    public TrainSignalPeripheral(@NotNull BlockPos pos, Level level) {
+    public TrainSignalPeripheral(@NotNull SignalTileEntity signal, Level level) {
         this.level = level;
-        signal = (SignalTileEntity) level.getBlockEntity(pos);
+        this.signal = signal;
     }
-    
+
     @LuaFunction
     public final MethodResult getSignalState() {
-        return MethodResult.of(true, signal.getState());
+        SignalTileEntity.SignalState state = signal.getState();
+        return MethodResult.of(true, state.toString());
     }
 
+    public final MethodResult getTrainPresent() {
+        //TODO: Implement this method properly (it's not working) lul (pls kill me)
+        return MethodResult.of(true, null);
 
+    }
 
     @NotNull
     @Override

@@ -2,6 +2,7 @@ buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
         maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
         mavenCentral()
     }
     dependencies {
@@ -36,7 +37,7 @@ minecraft {
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'cccbridge'
-
+            arg "-mixin.config=cccbridge.mixins.json"
             mods {
                 cccbridge {
                     source sourceSets.main
@@ -127,6 +128,11 @@ dependencies {
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 }
 
+mixin {
+    add sourceSets.main, 'cccbridge.mixin-refmap.json'
+    config 'cccbridge.mixins.json'
+}
+
 jar {
     manifest {
         attributes([
@@ -136,9 +142,13 @@ jar {
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "cccbridgesareus",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "TweakClass"              : "org.spongepowered.asm.launch.MixinTweaker",
+                "TweakerOrder"            : 0,
+                "MixinConfigs"            : "mixins.cccbridge.json"
         ])
     }
+    rename 'mixin.refmap.json', 'mixin-refmap.cccbridge.json'
 }
 
 jar.finalizedBy('reobfJar')

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SourceBlockEntity extends BlockEntity implements PeripheralBlockEntity {
+public class SourceBlockEntity extends BlockEntity implements IPeripheralBlockEntity {
     private SourceBlockPeripheral peripheral;
 
     public SourceBlockEntity(BlockPos pos, BlockState state) {

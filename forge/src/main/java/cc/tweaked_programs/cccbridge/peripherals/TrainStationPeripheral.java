@@ -30,14 +30,16 @@ import java.util.UUID;
  *
  * @version 1.0
  */
-public class TrainPeripheral implements IPeripheral {
+public class TrainStationPeripheral implements IPeripheral {
     private static Schedule schedule;
-    private final Level level;
+    private final List<IComputerAccess> pcs = new ArrayList<>();
     private final StationTileEntity station;
+    private Level level;
+    private Train oldstatearrival;
 
-    public TrainPeripheral(@NotNull BlockPos pos, Level level) {
-        this.level = level;
-        station = (StationTileEntity) level.getBlockEntity(pos);
+    public TrainStationPeripheral(@NotNull StationTileEntity station, @NotNull Level world) {
+        this.station = station;
+        this.level = world;
     }
 
     @NotNull
@@ -82,14 +84,8 @@ public class TrainPeripheral implements IPeripheral {
         if (station.getStation().getPresentTrain().canDisassemble()) {
             Direction direction = station.getAssemblyDirection();
             BlockPos position = station.edgePoint.getGlobalPosition().above();
-            this.schedule = station.getStation().getPresentTrain().runtime.getSchedule();
-            /*ServerPlayer player = new ServerPlayer(
-                    level.getServer(),
-                    level.getServer().overworld(),
-                    new GameProfile(UUID.fromString("069a79f4-44e9-4726-a5be-fca90e38aaf5"), "Notch"),
-                    null
-            );*/
-            station.getStation().getPresentTrain().disassemble(/*player,*/ direction, position);
+            schedule = station.getStation().getPresentTrain().runtime.getSchedule();
+            station.getStation().getPresentTrain().disassemble(direction, position);
             return MethodResult.of(true, "Train disassembled");
         }
         return MethodResult.of(false, "Could not disassemble train");
@@ -102,6 +98,9 @@ public class TrainPeripheral implements IPeripheral {
      */
     @LuaFunction
     public final String getStationName() {
+        if (station.getStation() == null) {
+            return "No station";
+        }
         return station.getStation().name;
     }
 
@@ -111,11 +110,11 @@ public class TrainPeripheral implements IPeripheral {
      * @return Name of train.
      */
     @LuaFunction
-    public final MethodResult getTrainName() {
+    public final String getTrainName() {
         if (station.getStation().getPresentTrain() == null) {
-            return MethodResult.of(false, "There is no train to get the name of");
+            return "No train";
         }
-        return MethodResult.of(true, Objects.requireNonNull(station.getStation().getPresentTrain()).name.getContents());
+        return Objects.requireNonNull(station.getStation().getPresentTrain()).name.getString();
     }
 
     /**
@@ -135,7 +134,6 @@ public class TrainPeripheral implements IPeripheral {
             station.notifyUpdate();
             return true;
         }
-        //AllPackets.channel.sendToServer(StationEditPacket.configure(station.getBlockPos(),false,name));
         return false;
     }
 
@@ -161,7 +159,6 @@ public class TrainPeripheral implements IPeripheral {
             AllPackets.channel.send(PacketDistributor.ALL.noArg(), new TrainEditReturnPacket(Train.id, name, Train.icon.getId()));
             return MethodResult.of(true, "Train name set to" + name);
         }
-        //AllPackets.channel.sendToServer(new TrainEditPacket(train.id, name,train.icon.getId()));
         return MethodResult.of(false, "Train name cannot be blank");
     }
 
@@ -194,6 +191,39 @@ public class TrainPeripheral implements IPeripheral {
     @LuaFunction
     public final void clearSchedule() {
         schedule = null;
+    }
+
+    //on train arrival at station
+    private void arrivalEvent() {
+        for (IComputerAccess pc : pcs) {
+            pc.queueEvent("arrival", station.getStation().getPresentTrain().name.getString(), station.getStation().getPresentTrain().carriages.size(), station.getStation().name);
+        }
+    }
+
+    //on train departure from station
+    private void departureEvent() {
+        for (IComputerAccess pc : pcs) {
+            pc.queueEvent("departure", station.getStation().name);
+        }
+    }
+
+    public void tick() {
+        if (oldstatearrival == null && station.getStation().getPresentTrain() != null) {
+            arrivalEvent();
+        } else if (oldstatearrival != null && station.getStation().getPresentTrain() == null) {
+            departureEvent();
+        }
+        oldstatearrival = station.getStation().getPresentTrain();
+    }
+
+    @Override
+    public void attach(@NotNull IComputerAccess iComputerAccess) {
+        pcs.add(iComputerAccess);
+    }
+
+    @Override
+    public void detach(@NotNull IComputerAccess iComputerAccess) {
+        pcs.removeIf(p -> (p.getID() == iComputerAccess.getID()));
     }
 
     @Override
