@@ -2,6 +2,7 @@ package cc.tweaked_programs.cccbridge.peripherals;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.content.logistics.trains.GraphLocation;
+import com.simibubi.create.content.logistics.trains.entity.Carriage;
 import com.simibubi.create.content.logistics.trains.entity.Train;
 import com.simibubi.create.content.logistics.trains.management.edgePoint.station.GlobalStation;
 import com.simibubi.create.content.logistics.trains.management.edgePoint.station.StationTileEntity;
@@ -193,7 +194,31 @@ public class TrainStationPeripheral implements IPeripheral {
         schedule = null;
     }
 
-    //on train arrival at station
+    @LuaFunction
+    public final MethodResult getTrainItemContents() {
+        if (station.getStation().getPresentTrain() == null) {
+            return MethodResult.of(false, "No train present");
+        }
+        List<net.minecraftforge.items.IItemHandlerModifiable> list = new ArrayList<net.minecraftforge.items.IItemHandlerModifiable>();
+        for (Carriage carriage : station.getStation().getPresentTrain().carriages) {
+            list.add(carriage.storage.getItems());
+        }
+        return MethodResult.of(true, list);
+    }
+
+    @LuaFunction
+    public final MethodResult getTrainFluidContents() {
+        if (station.getStation().getPresentTrain() == null) {
+            return MethodResult.of(false, "No train present");
+        }
+        List<net.minecraftforge.fluids.capability.IFluidHandler> list = new ArrayList<>();
+        for (Carriage carriage : station.getStation().getPresentTrain().carriages) {
+            list.add(carriage.storage.getFluids());
+        }
+        return MethodResult.of(true, list);
+    }
+
+    //on train arrival at station<
     private void arrivalEvent() {
         for (IComputerAccess pc : pcs) {
             pc.queueEvent("arrival", station.getStation().getPresentTrain().name.getString(), station.getStation().getPresentTrain().carriages.size(), station.getStation().name);
