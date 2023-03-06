@@ -21,8 +21,10 @@ jobs:
     - name: Build project
       run: |
         cd ./forge
+        chmod 777 gradlew
         ./gradlew build
         cd ../fabric
+        chmod 777 gradlew
         ./gradlew build
   
 
