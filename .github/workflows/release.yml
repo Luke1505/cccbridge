@@ -21,9 +21,9 @@ jobs:
     - name: Build project
       run: |
         cd ./forge
-        gradlew build
+        ./gradlew build
         cd ../fabric
-        gradlew build
+        ./gradlew build
   
 
     - name: Publish Release
