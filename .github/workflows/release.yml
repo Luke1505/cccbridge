@@ -23,7 +23,7 @@ jobs:
         cd ./forge
         chmod 777 gradlew
         ./gradlew build
-        cd ..
+        ls
 
     - name: Build Fabric
       run: |
@@ -31,9 +31,8 @@ jobs:
         chmod 777 gradlew
         ./gradlew build
         cd ..
-    - name: Setup tmate session
-      if: success() || failure()
-      uses: mxschmitt/action-tmate@v3
+        
+        
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
