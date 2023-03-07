@@ -51,15 +51,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Make Release Folder
-      run: |
-            mkdir ./release
+    - name: Create release directory
+      run: mkdir -p release
+
             
     - name: Download files
       uses: actions/download-artifact@v3.0.2
       with:
         name: JarFiles
-        path: ./release
+        path: release
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
