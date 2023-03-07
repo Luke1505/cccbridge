@@ -3,7 +3,7 @@ name: Fabric Build
 on:
   push:
     paths:
-      - 'fabric/**'
+      - '../fabric/**'
   
 jobs:
   Build:
