@@ -47,17 +47,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: JarFiles
-        path: |
-          ./forge/build/lib/*.jar
-          ./fabric/build/lib/*.jar
-          
-    - name: Get JARs
-      run: |
-        mkdir -p release
-        ls ./fabric/build/lib
-        ls ./forge/build/lib
-        cp ./forge/build/lib/*.jar release/
-        cp ./fabric/build/lib/*.jar release/
+        path: ./release
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
