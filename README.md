@@ -27,3 +27,6 @@ With these blocks, many things you always wanted to handle precicely and easily 
 Documentation
 -------------------------------------
 To find out more, check out the [wiki section](https://github.com/tweaked-programs/cccbridge/wiki)!
+
+[![Fabric Build](https://github.com/Luke1505/cccbridge/actions/workflows/fabric.yml/badge.svg?event=push)](https://github.com/Luke1505/cccbridge/actions/workflows/fabric.yml)
+[![Forge Build](https://github.com/Luke1505/cccbridge/actions/workflows/forge.yml/badge.svg?event=push)](https://github.com/Luke1505/cccbridge/actions/workflows/forge.yml)
