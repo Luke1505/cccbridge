@@ -23,12 +23,14 @@ jobs:
         cd ./forge
         chmod 777 gradlew
         ./gradlew build
+        cd ..
 
     - name: Build Fabric
       run: |
         cd ./fabric
         chmod 777 gradlew
         ./gradlew build
+        cd ..
       
     - name: Check files
       run: |
