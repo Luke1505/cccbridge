@@ -24,6 +24,10 @@ jobs:
         chmod 777 gradlew
         ./gradlew build
         ls
+        cd ./build
+        ls
+        cd ./lib
+        ls
 
     - name: Build Fabric
       run: |
