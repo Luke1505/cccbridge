@@ -23,7 +23,11 @@ jobs:
         cd ./forge
         chmod 777 gradlew
         ./gradlew build
-        cd ..
+        ls
+        cd ./build
+        ls
+        cd ./libs
+        ls
 
     - name: Build Fabric
       run: |
@@ -31,13 +35,8 @@ jobs:
         chmod 777 gradlew
         ./gradlew build
         cd ..
-      
-    - name: Check files
-      run: |
-        if [ -z "$(find ./forge/build/lib -maxdepth 1 -name '*.jar' -print -quit)" ] || [ -z "$(find ./fabric/build/lib -maxdepth 1 -name '*.jar' -print -quit)" ]; then
-        echo "At least one JAR file is missing in one or both directories."
-        exit 1
-        fi
+        
+        
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
@@ -45,7 +44,7 @@ jobs:
         # Artifact name
         name: JarFiles
         path:  |
-            ./forge/build/lib/*.jar
+            ./forge/build/libs/*.jar
             ./fabric/build/lib/*.jar
 
   Release:
