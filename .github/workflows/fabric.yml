@@ -1,7 +1,9 @@
 name: Fabric Build
 
 on:
-  push
+  push:
+    paths:
+      - './fabric/**'
   
 jobs:
   Build:
