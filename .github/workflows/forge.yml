@@ -1,7 +1,9 @@
 name: Forge Build
 
 on:
-  push
+  push:
+    paths:
+      - './forge/**'
   
 jobs:
   Build:
