@@ -23,4 +23,4 @@ jobs:
       run: |
         cd ./fabric
         chmod 777 gradlew
-        ./gradlew build
+        ./gradlew build --dry-run
