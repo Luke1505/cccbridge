@@ -38,8 +38,8 @@ jobs:
     - name: Get JARs
       run: |
         mkdir -p release
-        cp ./forge/build/libs/*.jar release/
-        cp ./fabric/build/libs/*.jar release/
+        cp ./forge/build/lib/*.jar release/
+        cp ./fabric/build/lib/*.jar release/
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
