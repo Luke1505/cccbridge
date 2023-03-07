@@ -26,7 +26,7 @@ jobs:
         ls
         cd ./build
         ls
-        cd ./lib
+        cd ./libs
         ls
 
     - name: Build Fabric
@@ -44,7 +44,7 @@ jobs:
         # Artifact name
         name: JarFiles
         path:  |
-            ./forge/build/lib/*.jar
+            ./forge/build/libs/*.jar
             ./fabric/build/lib/*.jar
 
   Release:
