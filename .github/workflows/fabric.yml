@@ -19,7 +19,7 @@ jobs:
         java-version: 17
         distribution: 'temurin'
     
-    - name: Build project
+    - name: Build
       run: |
         cd ./fabric
         chmod 777 gradlew
