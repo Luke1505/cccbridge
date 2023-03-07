@@ -43,6 +43,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Make Release Folder
+      run: |
+            mkdir ./release
+            
     - name: Download files
       uses: actions/download-artifact@v2
       with:
