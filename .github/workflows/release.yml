@@ -38,6 +38,8 @@ jobs:
     - name: Get JARs
       run: |
         mkdir -p release
+        ls ./fabric/build/lib
+        ls ./forge/build/lib
         cp ./forge/build/lib/*.jar release/
         cp ./fabric/build/lib/*.jar release/
 
