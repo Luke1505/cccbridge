@@ -34,7 +34,12 @@ jobs:
         cd ./fabric
         chmod 777 gradlew
         ./gradlew build
-        cd ..
+        ls
+        cd ./build
+        ls
+        cd ./lib
+        ls
+        
         
         
 
