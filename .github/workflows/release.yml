@@ -55,8 +55,8 @@ jobs:
         # Artifact name
         name: JarFiles
         path:  |
-            ./forge/build/libs/*.jar
-            ./fabric/build/lib/*.jar
+            ./forge/build/libs/${{ env.ForgeFile }}
+            ./fabric/build/lib/${{ env.FabricFile }}
 
   Release:
     needs: Build
@@ -65,20 +65,29 @@ jobs:
     steps:
     - name: Create release directory
       run: mkdir -p release
-
-            
+ 
     - name: Download files
       uses: actions/download-artifact@v3.0.2
       with:
         name: JarFiles
         path: release
 
-    - name: Upload Release Asset
+    - name: Upload Forge Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}/assets{?name,label}
-        asset_path: ./release
-        asset_name: Built JARs
+        asset_path: ./release/${{ env.ForgeFile }}
+        asset_name: ${{ env.ForgeFile }}
+        asset_content_type: application/java-archive
+        
+    - name: Upload Fabric Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}/assets{?name,label}
+        asset_path: ./release/${{ env.FabricFile }}
+        asset_name: ${{ env.FabricFile }}
         asset_content_type: application/java-archive
