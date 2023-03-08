@@ -40,6 +40,15 @@ jobs:
         cd ./lib
         ls
         
+    - name: Get File Names
+      run: |
+        cd ./forge
+        VERSION=$(grep -Po "version = '\K[^']*" build.gradle)
+        export ForgeFile=cccbridge-$VERSION.jar
+        cd ../fabric
+        VERSIONFA=$(grep -Po "version = '\K[^']*" build.gradle)
+        export FabricFile=cccbridge-$VERSIONFA.jar
+        
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
       with:
