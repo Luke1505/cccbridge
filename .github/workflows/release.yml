@@ -46,12 +46,14 @@ jobs:
         ls
         chmod 777 build.gradle
         VERSION=$(grep -Po "version = '\K[^']*" build.gradle)
+        set -x
         echo ${VERSION}
         export ForgeFile=cccbridge-$VERSION.jar
         cd ../fabric
         ls
         chmod 777 build.gradle
         VERSIONFA=$(grep -Po "version = '\K[^']*" build.gradle)
+        set -x
         echo ${VERSIONFA}
         export FabricFile=cccbridge-$VERSIONFA.jar
         
