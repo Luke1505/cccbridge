@@ -43,10 +43,14 @@ jobs:
     - name: Get File Names
       run: |
         cd ./forge
+        ls
         VERSION=$(grep -Po "version = '\K[^']*" build.gradle)
+        echo ${VERSION}
         export ForgeFile=cccbridge-$VERSION.jar
         cd ../fabric
+        ls
         VERSIONFA=$(grep -Po "version = '\K[^']*" build.gradle)
+        echo ${VERSIONFA}
         export FabricFile=cccbridge-$VERSIONFA.jar
         
     - name: Upload a Build Artifact
