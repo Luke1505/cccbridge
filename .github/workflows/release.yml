@@ -83,6 +83,9 @@ jobs:
       run: |
             cd ./release
             ls
+            cd ./forge
+            ls
+            cd ../fabric
 
     - name: Upload Forge Release Asset
       uses: actions/upload-release-asset@v1
