@@ -34,7 +34,8 @@ jobs:
         chmod 777 gradlew
         ./gradlew build
         
-    - id: files
+    - name: Get Filenames
+      id: files
       run: |
         set -x
         cd ./forge
@@ -67,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Get File Names
+    - name: Get Filenames
       run: |
         ForgeFile=${{ needs.Build.outputs.ForgeFile }}
         FabricFile=${{ needs.Build.outputs.FabricFile }}
