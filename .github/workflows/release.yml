@@ -34,8 +34,7 @@ jobs:
         chmod 777 gradlew
         ./gradlew build
         
-    - name: Get File Names
-      id: files
+    - id: files
       run: |
         set -x
         cd ./forge
