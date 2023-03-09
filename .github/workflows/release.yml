@@ -23,31 +23,23 @@ jobs:
         cd ./forge
         chmod 777 gradlew
         ./gradlew build
-        ls
-        cd ./build
-        ls
-        cd ./libs
-        ls
 
     - name: Build Fabric
       run: |
         cd ./fabric
         chmod 777 gradlew
         ./gradlew build
-        ls
-        cd ./build
-        ls
-        cd ./libs
-        ls
         
     - name: Get File Names
       run: |
+        set -x
         cd ./forge
         MC_VERSION=$(grep -Po 'mc_version=\K.*$' gradle.properties)
         MOD_VERSION=$(grep -Po 'mod_version=\K.*$' gradle.properties)
         MODLOADER=$(grep -Po 'modloader=\K.*$' gradle.properties)
         VERSION=$MC_VERSION-$MOD_VERSION-$MODLOADER
         export ForgeFile=cccbridge-$VERSION.jar
+        cd ../fabric
         MC_VERSIONFA=$(grep -Po 'mc_version=\K.*$' gradle.properties)
         MOD_VERSIONFA=$(grep -Po 'mod_version=\K.*$' gradle.properties)
         MODLOADERFA=$(grep -Po 'modloader=\K.*$' gradle.properties)
