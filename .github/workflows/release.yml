@@ -71,6 +71,9 @@ jobs:
       run: |
         ForgeFile=${{ needs.Build.outputs.ForgeFile }}
         FabricFile=${{ needs.Build.outputs.FabricFile }}
+      env:
+        ForgeFile: $ForgeFile
+        FabricFile: $FabricFile
     
     - name: Create release directory
       run: mkdir -p release
@@ -87,8 +90,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}/assets{?name,label}
-        asset_path: ./release/$ForgeFile
-        asset_name: $ForgeFile
+        asset_path: ./release/${{ env.ForgeFile }}
+        asset_name: ${{ env.ForgeFile }}
         asset_content_type: application/java-archive
         
     - name: Upload Fabric Release Asset
@@ -97,6 +100,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}/assets{?name,label}
-        asset_path: ./release/$FabricFile
-        asset_name: $FabricFile
+        asset_path: ./release/${{ env.FabricFile }}
+        asset_name: ${{ env.FabricFile }}
         asset_content_type: application/java-archive
