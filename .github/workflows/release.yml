@@ -67,9 +67,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - env: 
-        ForgeFile: ${{ needs.Build.outputs.ForgeFile }}
-        FabricFile: ${{ needs.Build.outputs.FabricFile }}
+    - name: Get File Names
+      run: |
+        ForgeFile = ${{ needs.Build.outputs.ForgeFile }}
+        FabricFile = ${{ needs.Build.outputs.FabricFile }}
     
     - name: Create release directory
       run: mkdir -p release
