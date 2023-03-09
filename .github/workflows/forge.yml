@@ -3,7 +3,7 @@ name: Forge Build
 on:
   push:
     paths:
-      - 'forge/**'
+      - '../forge/**'
   
 jobs:
   Build:
