@@ -78,6 +78,11 @@ jobs:
       with:
         name: JarFiles
         path: release
+        
+    - name: Check Files
+      run: |
+            cd ./release
+            ls
 
     - name: Upload Forge Release Asset
       uses: actions/upload-release-asset@v1
