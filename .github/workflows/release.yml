@@ -7,6 +7,7 @@ on:
 jobs:
   Build:
     runs-on: ubuntu-latest
+    
     outputs:
       ForgeFile: ${{ steps.files.outputs.ForgeFile }}
       FabricFile: ${{ steps.files.outputs.FabricFile }}
@@ -42,13 +43,13 @@ jobs:
         MOD_VERSION=$(grep -Po 'mod_version=\K.*$' gradle.properties)
         MODLOADER=$(grep -Po 'modloader=\K.*$' gradle.properties)
         VERSION=$MC_VERSION-$MOD_VERSION-$MODLOADER
-        echo "ForgeFile=cccbridge-$VERSION.jar" >> "$GITHUB_OUTPUT"
+        echo "ForgeFile=cccbridge-$VERSION.jar" >> $GITHUB_OUTPUT
         cd ../fabric
         MC_VERSIONFA=$(grep -Po 'minecraft_version=\K.*$' gradle.properties)
         MOD_VERSIONFA=$(grep -Po 'mod_version = \K.*$' gradle.properties)
         MODLOADERFA=$(grep -Po 'modloader = \K.*$' gradle.properties)
         VERSIONFA=$MC_VERSIONFA-$MOD_VERSIONFA-$MODLOADERFA
-        echo "FabricFile=cccbridge-$VERSIONFA.jar" >> "$GITHUB_OUTPUT" 
+        echo "FabricFile=cccbridge-$VERSIONFA.jar" >> $GITHUB_OUTPUT
       env:
         ForgeFile: ${{ env.ForgeFile }}
         FabricFile: ${{ env.FabricFile }}
