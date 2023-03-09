@@ -10,6 +10,7 @@ jobs:
     outputs:
       ForgeFile: ${{ steps.files.outputs.ForgeFile }}
       FabricFile: ${{ steps.files.outputs.FabricFile }}
+      
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
