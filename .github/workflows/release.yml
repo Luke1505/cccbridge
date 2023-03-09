@@ -73,8 +73,8 @@ jobs:
         ForgeFile=${{ needs.Build.outputs.ForgeFile }}
         FabricFile=${{ needs.Build.outputs.FabricFile }}
       env:
-        ForgeFile: $ForgeFile
-        FabricFile: $FabricFile
+        ForgeFile: ${{ env.ForgeFile }}
+        FabricFile: ${{ env.FabricFile }}
     
     - name: Create release directory
       run: mkdir -p release
