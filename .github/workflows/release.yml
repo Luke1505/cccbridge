@@ -69,8 +69,8 @@ jobs:
     steps:
     - name: Get File Names
       run: |
-        ForgeFile = ${{ needs.Build.outputs.ForgeFile }}
-        FabricFile = ${{ needs.Build.outputs.FabricFile }}
+        ForgeFile=${{ needs.Build.outputs.ForgeFile }}
+        FabricFile=${{ needs.Build.outputs.FabricFile }}
     
     - name: Create release directory
       run: mkdir -p release
