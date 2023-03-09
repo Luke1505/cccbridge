@@ -50,9 +50,6 @@ jobs:
         MODLOADERFA=$(grep -Po 'modloader = \K.*$' gradle.properties)
         VERSIONFA=$MC_VERSIONFA-$MOD_VERSIONFA-$MODLOADERFA
         echo "FabricFile=cccbridge-$VERSIONFA.jar" >> $GITHUB_OUTPUT
-      env:
-        ForgeFile: ${{ env.ForgeFile }}
-        FabricFile: ${{ env.FabricFile }}
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.2
@@ -73,8 +70,8 @@ jobs:
         ForgeFile=${{ needs.Build.outputs.ForgeFile }}
         FabricFile=${{ needs.Build.outputs.FabricFile }}
       env:
-        ForgeFile: ${{ env.ForgeFile }}
-        FabricFile: ${{ env.FabricFile }}
+        ForgeFile: ${{ needs.Build.outputs.ForgeFile }}
+        FabricFile: ${{ needs.Build.outputs.FabricFile }}
     
     - name: Create release directory
       run: mkdir -p release
