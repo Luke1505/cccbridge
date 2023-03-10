@@ -114,10 +114,36 @@ jobs:
     # The type of the changelog. Allowed values: "text", "html" (aka. WYSIWYG), "markdown".
         changelog_type: "markdown"
     # The display name for this file. Defaults to the filename.
-        display_name: ${{ needs.Build.outputs.ForgeFile }}
+        display_name: "${{ needs.Build.outputs.ForgeFile }} forge"
     # The game version IDs to select on this file. Separate IDs with "," (no quotes). See README for more info.
-        game_versions: v${{ needs.Build.outputs.Version }}
+        game_versions: "${{ needs.Build.outputs.Version }},Client,Server,Java 17"
     # The type of this release. Allowed values: "alpha", "beta", "release".
         release_type: "beta"
     # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
         relations: cc-tweaked:requiredDependency,create:requiredDependency
+        
+    - name: Upload Fabric to CurseForge
+  # You may pin to the exact commit or the version.
+  # uses: itsmeow/curseforge-upload@78269efea1104bd4407d6a2f2b9ffe15bbcdb30d
+      uses: itsmeow/curseforge-upload@3.1.1
+      with:
+    # Token used to authenticate with CurseForge API. Use a repository secret for this.
+        token: ${{ secrets.CURSEFORGE }}
+    # Project id (numerical) to upload file to. You can get the numerical ID from the sidebar on a project page.
+        project_id: 656214
+    # The subdomain of curseforge.com where the upload request will be made. (minecraft, kerbal, etc.)
+        game_endpoint: "minecraft"
+    # The path to the file you want to upload
+        file_path: ./release/fabric/build/libs/${{ needs.Build.outputs.FabricFile }}
+    # The changelog text to put on the file.
+        changelog: ${{ github.event.release.body }}
+    # The type of the changelog. Allowed values: "text", "html" (aka. WYSIWYG), "markdown".
+        changelog_type: "markdown"
+    # The display name for this file. Defaults to the filename.
+        display_name: "v${{ needs.Build.outputs.Version }} fabric"
+    # The game version IDs to select on this file. Separate IDs with "," (no quotes). See README for more info.
+        game_versions: "${{ needs.Build.outputs.Version }},Client,Server,Java 17"
+    # The type of this release. Allowed values: "alpha", "beta", "release".
+        release_type: "beta"
+    # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
+        relations: cc-restiched:requiredDependency,create-fabric:requiredDependency
