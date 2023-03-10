@@ -85,7 +85,14 @@ jobs:
             ls
             cd ./forge
             ls
-            cd ../fabric
+            cd ./build
+            ls
+            cd ..
+            cd ..
+            cd ./fabric
+            ls
+            cd ./build
+            ls
 
     - name: Upload Forge Release Asset
       uses: actions/upload-release-asset@v1
