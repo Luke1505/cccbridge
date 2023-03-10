@@ -117,7 +117,7 @@ jobs:
     # The display name for this file. Defaults to the filename.
         display_name: "v${{ needs.Build.outputs.Version }} forge"
     # The game version IDs to select on this file. Separate IDs with "," (no quotes). See README for more info.
-        game_versions: "${{ needs.Build.outputs.McVersion }},Client,Server,Java 17"
+        game_versions: ${{ needs.Build.outputs.McVersion }}
     # The type of this release. Allowed values: "alpha", "beta", "release".
         release_type: "beta"
     # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
@@ -143,7 +143,7 @@ jobs:
     # The display name for this file. Defaults to the filename.
         display_name: "v${{ needs.Build.outputs.Version }} fabric"
     # The game version IDs to select on this file. Separate IDs with "," (no quotes). See README for more info.
-        game_versions: "${{ needs.Build.outputs.McVersion }},Client,Server,Java 17"
+        game_versions: ${{ needs.Build.outputs.McVersion }}
     # The type of this release. Allowed values: "alpha", "beta", "release".
         release_type: "beta"
     # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
