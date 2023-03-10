@@ -148,3 +148,59 @@ jobs:
         release_type: "beta"
     # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
         relations: cc-restitched:requiredDependency,create-fabric:requiredDependency
+
+    - name: Upload Forge to Modrinth
+  # You may pin to the exact commit or the version.
+  # uses: RubixDev/modrinth-upload@d4a88fafa65118be1e486193e2f2ab0d84d00456
+      uses: RubixDev/modrinth-upload@v1.0.0
+      with:
+      # Token used to authenticate with Modrinth API. Use a repository secret for this
+        token: ${{ secrets.MODRINTH }}
+      # The path to the file you want to upload
+        file_path: ./release/forge/build/libs/${{ needs.Build.outputs.ForgeFile }}
+      # The display name for this file
+        name:  "v${{ needs.Build.outputs.Version }} forge"
+      # The version number. Ideally will follow semantic versioning
+        version:  "${{ needs.Build.outputs.Version }}-forge"
+      # The changelog for this version
+        changelog: ${{ github.event.release.body }}
+      # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectId:relationType - Valid relationTypes are: required, optional, incompatible and embedded
+        relations: LNytGWDc:required,gu7yAYhd:required
+      # The game versions to select on this file. Separate with "," (no quotes)
+        game_versions: ${{ needs.Build.outputs.McVersion }}
+      # The type of this release. Allowed values: "alpha", "beta", "release"
+        release_type: "beta"
+      # The mod loaders that this version supports. Separate with "," (no quotes)
+        loaders: forge
+      # Whether the version is featured or not
+        featured: true
+      # Project ID to upload file to. You can get the ID from the sidebar on a project page under "Technical Information"
+        project_id: fXt291FO
+        
+    - name: Upload Fabric to Modrinth
+  # You may pin to the exact commit or the version.
+  # uses: RubixDev/modrinth-upload@d4a88fafa65118be1e486193e2f2ab0d84d00456
+      uses: RubixDev/modrinth-upload@v1.0.0
+      with:
+      # Token used to authenticate with Modrinth API. Use a repository secret for this
+        token: ${{ secrets.MODRINTH }}
+      # The path to the file you want to upload
+        file_path: ./release/fabric/build/libs/${{ needs.Build.outputs.FabricFile }}
+      # The display name for this file
+        name:  "v${{ needs.Build.outputs.Version }} fabric"
+      # The version number. Ideally will follow semantic versioning
+        version:  "${{ needs.Build.outputs.Version }}-fabric"
+      # The changelog for this version
+        changelog: ${{ github.event.release.body }}
+      # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectId:relationType - Valid relationTypes are: required, optional, incompatible and embedded
+        relations: Xbc0uyRg:required,eldBwa5V:required
+      # The game versions to select on this file. Separate with "," (no quotes)
+        game_versions: ${{ needs.Build.outputs.McVersion }}
+      # The type of this release. Allowed values: "alpha", "beta", "release"
+        release_type: "beta"
+      # The mod loaders that this version supports. Separate with "," (no quotes)
+        loaders: fabric
+      # Whether the version is featured or not
+        featured: true
+      # Project ID to upload file to. You can get the ID from the sidebar on a project page under "Technical Information"
+        project_id: fXt291FO
