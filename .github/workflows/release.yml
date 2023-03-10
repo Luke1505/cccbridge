@@ -120,4 +120,4 @@ jobs:
     # The type of this release. Allowed values: "alpha", "beta", "release".
         release_type: "beta"
     # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
-        relations: cc-tweaked:requiredDependency, create:requiredDependency
+        relations: cc-tweaked:requiredDependency,create:requiredDependency
