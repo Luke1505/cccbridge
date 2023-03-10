@@ -12,7 +12,7 @@ jobs:
       ForgeFile: ${{ steps.files.outputs.ForgeFile }}
       FabricFile: ${{ steps.files.outputs.FabricFile }}
       Version: ${{ steps.files.outputs.Version }}
-      
+      McVersion: S{{ steps.files.outputs.McVersion }}
       
     steps:
     - name: Checkout code
@@ -45,6 +45,7 @@ jobs:
         MODLOADER=$(grep -Po 'modloader=\K.*$' gradle.properties)
         VERSION=$MC_VERSION-$MOD_VERSION-$MODLOADER
         echo "Version=$MOD_VERSION" >> $GITHUB_OUTPUT
+        echo "McVersion=$MC_VERSION" >> $GITHUB_OUTPUT
         echo "ForgeFile=cccbridge-$VERSION.jar" >> $GITHUB_OUTPUT
         cd ../fabric
         MC_VERSIONFA=$(grep -Po 'minecraft_version=\K.*$' gradle.properties)
@@ -69,7 +70,7 @@ jobs:
     steps:
     - name: Create release directory
       run: mkdir -p release
- 
+      
     - name: Download files
       uses: actions/download-artifact@v3.0.2
       with:
@@ -116,7 +117,7 @@ jobs:
     # The display name for this file. Defaults to the filename.
         display_name: "v${{ needs.Build.outputs.Version }} forge"
     # The game version IDs to select on this file. Separate IDs with "," (no quotes). See README for more info.
-        game_versions: "${{ needs.Build.outputs.Version }},Client,Server,Java 17"
+        game_versions: "${{ needs.Build.outputs.McVersion }},Client,Server,Java 17"
     # The type of this release. Allowed values: "alpha", "beta", "release".
         release_type: "beta"
     # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
@@ -142,7 +143,7 @@ jobs:
     # The display name for this file. Defaults to the filename.
         display_name: "v${{ needs.Build.outputs.Version }} fabric"
     # The game version IDs to select on this file. Separate IDs with "," (no quotes). See README for more info.
-        game_versions: "${{ needs.Build.outputs.Version }},Client,Server,Java 17"
+        game_versions: "${{ needs.Build.outputs.McVersion }},Client,Server,Java 17"
     # The type of this release. Allowed values: "alpha", "beta", "release".
         release_type: "beta"
     # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
