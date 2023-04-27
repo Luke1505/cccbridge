@@ -1,6 +1,6 @@
 package cc.tweaked_programs.cccbridge.peripherals;
 
-import cc.tweaked_programs.cccbridge.blockEntity.SourceBlockEntity;
+import cc.tweaked_programs.cccbridge.blockEntity.SourceBlockEntityI;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -21,11 +21,11 @@ import java.util.List;
  * @version 1.0
  */
 public class SourceBlockPeripheral implements IPeripheral {
-    private final SourceBlockEntity source_block_entity;
+    private final SourceBlockEntityI source_block_entity;
     private final Terminal term = new Terminal(4, 2);
     private final List<IComputerAccess> pcs = new LinkedList<>();
 
-    public SourceBlockPeripheral(SourceBlockEntity source_block_entity) {
+    public SourceBlockPeripheral(SourceBlockEntityI source_block_entity) {
         this.source_block_entity = source_block_entity;
     }
 

@@ -1,6 +1,6 @@
 package cc.tweaked_programs.cccbridge.display;
 
-import cc.tweaked_programs.cccbridge.blockEntity.TargetBlockEntity;
+import cc.tweaked_programs.cccbridge.blockEntity.TargetBlockEntityI;
 import com.simibubi.create.content.logistics.block.display.DisplayLinkContext;
 import com.simibubi.create.content.logistics.block.display.target.DisplayBoardTarget;
 import com.simibubi.create.content.logistics.block.display.target.DisplayTargetStats;
@@ -14,7 +14,7 @@ public class TargetBlockDisplayTarget extends DisplayBoardTarget {
     @Override
     public void acceptFlapText(int line, List<List<MutableComponent>> text, DisplayLinkContext context) {
         BlockEntity block = context.getTargetTE();
-        if (!(block instanceof TargetBlockEntity targetBlock))
+        if (!(block instanceof TargetBlockEntityI targetBlock))
             return;
 
         List<String> content = new LinkedList<>();
@@ -31,7 +31,7 @@ public class TargetBlockDisplayTarget extends DisplayBoardTarget {
     @Override
     public DisplayTargetStats provideStats(DisplayLinkContext context) {
         BlockEntity block = context.getTargetTE();
-        if (!(block instanceof TargetBlockEntity targetBlock))
+        if (!(block instanceof TargetBlockEntityI targetBlock))
             return new DisplayTargetStats(24, 1, this);
 
         return new DisplayTargetStats(24, targetBlock.getWidth(), this);

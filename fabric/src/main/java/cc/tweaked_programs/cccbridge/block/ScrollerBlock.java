@@ -1,7 +1,7 @@
 package cc.tweaked_programs.cccbridge.block;
 
 import cc.tweaked_programs.cccbridge.BlockRegister;
-import cc.tweaked_programs.cccbridge.blockEntity.ScrollerBlockEntity;
+import cc.tweaked_programs.cccbridge.blockEntity.ScrollerBlockEntityI;
 import dan200.computercraft.shared.util.WaterloggableHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -41,7 +41,7 @@ public class ScrollerBlock extends DirectionalBlock implements EntityBlock, Simp
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new ScrollerBlockEntity(pos, state);
+        return new ScrollerBlockEntityI(pos, state);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class ScrollerBlock extends DirectionalBlock implements EntityBlock, Simp
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        return BlockRegister.getBlockEntityType("scroller_block") == type ? ScrollerBlockEntity::tick : null;
+        return BlockRegister.getBlockEntityType("scroller_block") == type ? ScrollerBlockEntityI::tick : null;
     }
 
     @Override

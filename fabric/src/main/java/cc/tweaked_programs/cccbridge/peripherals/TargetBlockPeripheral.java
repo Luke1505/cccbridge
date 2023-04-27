@@ -1,6 +1,6 @@
 package cc.tweaked_programs.cccbridge.peripherals;
 
-import cc.tweaked_programs.cccbridge.blockEntity.TargetBlockEntity;
+import cc.tweaked_programs.cccbridge.blockEntity.TargetBlockEntityI;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
@@ -15,11 +15,11 @@ import org.jetbrains.annotations.Nullable;
  * @version 1.0
  */
 public class TargetBlockPeripheral implements IPeripheral {
-    private final TargetBlockEntity target_block_entity;
+    private final TargetBlockEntityI target_block_entity;
     private final Terminal term = new Terminal(32, 24);
 
 
-    public TargetBlockPeripheral(TargetBlockEntity target_block_entity) {
+    public TargetBlockPeripheral(TargetBlockEntityI target_block_entity) {
         this.target_block_entity = target_block_entity;
     }
 

@@ -7,15 +7,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SourceBlockEntity extends BlockEntity implements PeripheralBlockEntity {
+public class SourceBlockEntityI extends BlockEntity implements IPeripheralBlockEntity {
     private SourceBlockPeripheral peripheral;
 
-    public SourceBlockEntity(BlockPos pos, BlockState state) {
+    public SourceBlockEntityI(BlockPos pos, BlockState state) {
         super(BlockRegister.getBlockEntityType("source_block"), pos, state);
     }
 

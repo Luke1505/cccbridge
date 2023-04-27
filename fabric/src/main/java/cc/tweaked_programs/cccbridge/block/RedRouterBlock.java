@@ -1,7 +1,7 @@
 package cc.tweaked_programs.cccbridge.block;
 
 import cc.tweaked_programs.cccbridge.BlockRegister;
-import cc.tweaked_programs.cccbridge.blockEntity.RedRouterBlockEntity;
+import cc.tweaked_programs.cccbridge.blockEntity.RedRouterBlockEntityI;
 import com.simibubi.create.content.contraptions.wrench.IWrenchable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,7 +35,7 @@ public class RedRouterBlock extends HorizontalDirectionalBlock implements Entity
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new RedRouterBlockEntity(pos, state);
+        return new RedRouterBlockEntityI(pos, state);
     }
 
     public boolean isSignalSource(BlockState state) {
@@ -44,7 +44,7 @@ public class RedRouterBlock extends HorizontalDirectionalBlock implements Entity
 
     public int getSignal(BlockState state, BlockGetter world, BlockPos pos, Direction dir) {
         BlockEntity block = world.getBlockEntity(pos);
-        if (!(block instanceof RedRouterBlockEntity redrouter))
+        if (!(block instanceof RedRouterBlockEntityI redrouter))
             return 0;
         return redrouter.getPower(dir);
     }
@@ -52,7 +52,7 @@ public class RedRouterBlock extends HorizontalDirectionalBlock implements Entity
     @Override
     public InteractionResult onWrenched(BlockState state, UseOnContext context) {
         BlockEntity tileentity = context.getLevel().getBlockEntity(context.getClickedPos());
-        if (!(tileentity instanceof RedRouterBlockEntity redrouter))
+        if (!(tileentity instanceof RedRouterBlockEntityI redrouter))
             return InteractionResult.FAIL;
 
         if (context.getClickedFace().get3DDataValue() < 2) {
@@ -72,7 +72,7 @@ public class RedRouterBlock extends HorizontalDirectionalBlock implements Entity
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
-        return BlockRegister.getBlockEntityType("redrouter_block") == type ? RedRouterBlockEntity::tick : null;
+        return BlockRegister.getBlockEntityType("redrouter_block") == type ? RedRouterBlockEntityI::tick : null;
     }
 
     @Override

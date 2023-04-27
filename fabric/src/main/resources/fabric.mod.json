@@ -27,7 +27,7 @@
     ]
   },
   "mixins": [
-    "cccbridge.mixins.json"
+    "mixins.cccbridge.json"
   ],
 
   "depends": {

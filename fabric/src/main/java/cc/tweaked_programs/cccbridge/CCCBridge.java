@@ -1,10 +1,10 @@
 package cc.tweaked_programs.cccbridge;
 
 import cc.tweaked_programs.cccbridge.block.*;
-import cc.tweaked_programs.cccbridge.blockEntity.RedRouterBlockEntity;
-import cc.tweaked_programs.cccbridge.blockEntity.ScrollerBlockEntity;
-import cc.tweaked_programs.cccbridge.blockEntity.SourceBlockEntity;
-import cc.tweaked_programs.cccbridge.blockEntity.TargetBlockEntity;
+import cc.tweaked_programs.cccbridge.blockEntity.RedRouterBlockEntityI;
+import cc.tweaked_programs.cccbridge.blockEntity.ScrollerBlockEntityI;
+import cc.tweaked_programs.cccbridge.blockEntity.SourceBlockEntityI;
+import cc.tweaked_programs.cccbridge.blockEntity.TargetBlockEntityI;
 import cc.tweaked_programs.cccbridge.display.SourceBlockDisplaySource;
 import cc.tweaked_programs.cccbridge.display.TargetBlockDisplayTarget;
 import com.simibubi.create.content.logistics.block.display.AllDisplayBehaviours;
@@ -21,11 +21,11 @@ public class CCCBridge implements ModInitializer {
     @Override
     public void onInitialize() {
         // Block (-entities)
-        BlockRegister.registerBlockEntity("source_block", SourceBlockEntity::new, new SourceBlock());
-        BlockRegister.registerBlockEntity("target_block", TargetBlockEntity::new, new TargetBlock());
+        BlockRegister.registerBlockEntity("source_block", SourceBlockEntityI::new, new SourceBlock());
+        BlockRegister.registerBlockEntity("target_block", TargetBlockEntityI::new, new TargetBlock());
 
-        BlockRegister.registerBlockEntity("redrouter_block", RedRouterBlockEntity::new, new RedRouterBlock());
-        BlockRegister.registerBlockEntity("scroller_block", ScrollerBlockEntity::new, new ScrollerBlock());
+        BlockRegister.registerBlockEntity("redrouter_block", RedRouterBlockEntityI::new, new RedRouterBlock());
+        BlockRegister.registerBlockEntity("scroller_block", ScrollerBlockEntityI::new, new ScrollerBlock());
 
         // Create Display Stuff
         AllDisplayBehaviours.assignTile(AllDisplayBehaviours.register(new ResourceLocation(MOD_ID, "source_block_display_source"), new SourceBlockDisplaySource()), BlockRegister.getBlockEntityType("source_block"));

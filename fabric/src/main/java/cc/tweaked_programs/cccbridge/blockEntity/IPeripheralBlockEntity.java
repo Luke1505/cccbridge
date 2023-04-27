@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @version 1.0
  */
-public interface PeripheralBlockEntity {
+public interface IPeripheralBlockEntity {
     /**
      * Returns a peripheral. Can be null, if the TileEntity rejects the request.
      *

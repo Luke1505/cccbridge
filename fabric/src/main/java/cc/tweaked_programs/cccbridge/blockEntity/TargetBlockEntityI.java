@@ -11,10 +11,10 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-public class TargetBlockEntity extends BlockEntity implements PeripheralBlockEntity {
+public class TargetBlockEntityI extends BlockEntity implements IPeripheralBlockEntity {
     private TargetBlockPeripheral peripheral;
 
-    public TargetBlockEntity(BlockPos pos, BlockState state) {
+    public TargetBlockEntityI(BlockPos pos, BlockState state) {
         super(BlockRegister.getBlockEntityType("target_block"), pos, state);
     }
 

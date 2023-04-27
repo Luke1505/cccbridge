@@ -1,6 +1,6 @@
 package cc.tweaked_programs.cccbridge.block;
 
-import cc.tweaked_programs.cccbridge.blockEntity.TargetBlockEntity;
+import cc.tweaked_programs.cccbridge.blockEntity.TargetBlockEntityI;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -18,6 +18,6 @@ public class TargetBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TargetBlockEntity(pos, state);
+        return new TargetBlockEntityI(pos, state);
     }
 }

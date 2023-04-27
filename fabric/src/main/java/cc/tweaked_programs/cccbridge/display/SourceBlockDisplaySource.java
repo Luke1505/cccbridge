@@ -1,6 +1,6 @@
 package cc.tweaked_programs.cccbridge.display;
 
-import cc.tweaked_programs.cccbridge.blockEntity.SourceBlockEntity;
+import cc.tweaked_programs.cccbridge.blockEntity.SourceBlockEntityI;
 import com.simibubi.create.content.logistics.block.display.DisplayLinkContext;
 import com.simibubi.create.content.logistics.block.display.source.DisplaySource;
 import com.simibubi.create.content.logistics.block.display.target.DisplayTargetStats;
@@ -15,7 +15,7 @@ public class SourceBlockDisplaySource extends DisplaySource {
     @Override
     public List<MutableComponent> provideText(DisplayLinkContext context, DisplayTargetStats stats) {
         BlockEntity block = context.getSourceTE();
-        if (!(block instanceof SourceBlockEntity sourceBlock))
+        if (!(block instanceof SourceBlockEntityI sourceBlock))
             return EMPTY;
         sourceBlock.setSize(stats.maxColumns(), stats.maxRows());
 

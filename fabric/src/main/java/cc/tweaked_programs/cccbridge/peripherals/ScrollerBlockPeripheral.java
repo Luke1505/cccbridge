@@ -1,6 +1,6 @@
 package cc.tweaked_programs.cccbridge.peripherals;
 
-import cc.tweaked_programs.cccbridge.blockEntity.ScrollerBlockEntity;
+import cc.tweaked_programs.cccbridge.blockEntity.ScrollerBlockEntityI;
 import com.simibubi.create.foundation.tileEntity.behaviour.scrollvalue.ScrollValueBehaviour;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -21,11 +21,11 @@ import java.util.List;
  * @version 1.0
  */
 public class ScrollerBlockPeripheral implements IPeripheral {
-    private final ScrollerBlockEntity scroller;
+    private final ScrollerBlockEntityI scroller;
     private final Level level;
     private final List<IComputerAccess> pcs = new LinkedList<>();
 
-    public ScrollerBlockPeripheral(ScrollerBlockEntity block_entity, Level level) {
+    public ScrollerBlockPeripheral(ScrollerBlockEntityI block_entity, Level level) {
         this.scroller = block_entity;
         this.level = level;
     }

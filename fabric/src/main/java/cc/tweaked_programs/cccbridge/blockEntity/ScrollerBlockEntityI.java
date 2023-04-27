@@ -24,13 +24,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ScrollerBlockEntity extends SmartTileEntity implements PeripheralBlockEntity {
+public class ScrollerBlockEntityI extends SmartTileEntity implements IPeripheralBlockEntity {
     private ScrollerBlockPeripheral peripheral;
     private boolean locked = false;
     private boolean updateLock = false;
     private boolean playTickSound = false;
 
-    public ScrollerBlockEntity(BlockPos pos, BlockState state) {
+    public ScrollerBlockEntityI(BlockPos pos, BlockState state) {
         super(BlockRegister.getBlockEntityType("scroller_block"), pos, state);
     }
 
@@ -55,7 +55,7 @@ public class ScrollerBlockEntity extends SmartTileEntity implements PeripheralBl
     }
 
     public static void tick(Level world, BlockPos blockPos, BlockState state, BlockEntity be) {
-        if (!(be instanceof ScrollerBlockEntity scroller))
+        if (!(be instanceof ScrollerBlockEntityI scroller))
             return;
 
         if (scroller.updateLock && state.getValue(BlockStateProperties.LOCKED) != scroller.locked) {

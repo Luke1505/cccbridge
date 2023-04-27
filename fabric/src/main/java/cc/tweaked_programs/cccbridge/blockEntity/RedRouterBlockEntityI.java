@@ -18,15 +18,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RedRouterBlockEntity extends BlockEntity implements PeripheralBlockEntity {
+public class RedRouterBlockEntityI extends BlockEntity implements IPeripheralBlockEntity {
     private final HashMap<String, Integer> outputDir = new HashMap<>();
     private final HashMap<String, Integer> inputDir = new HashMap<>();
     private boolean blockupdate = false;
     private boolean newInputs = false;
     private RedRouterBlockPeripheral peripheral;
-    private Direction facing;
+    private final Direction facing;
 
-    public RedRouterBlockEntity(BlockPos pos, BlockState state) {
+    public RedRouterBlockEntityI(BlockPos pos, BlockState state) {
         super(BlockRegister.getBlockEntityType("redrouter_block"), pos, state);
         facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         outputDir.put("up", 0);
@@ -45,7 +45,7 @@ public class RedRouterBlockEntity extends BlockEntity implements PeripheralBlock
     }
 
     public static void tick(Level world, BlockPos blockPos, BlockState state, BlockEntity be) {
-        if (!(be instanceof RedRouterBlockEntity redrouter)) return;
+        if (!(be instanceof RedRouterBlockEntityI redrouter)) return;
 
         if (state.getValue(BlockStateProperties.HORIZONTAL_FACING) != redrouter.facing) {
             redrouter.blockupdate = true;
@@ -63,7 +63,7 @@ public class RedRouterBlockEntity extends BlockEntity implements PeripheralBlock
         }
     }
 
-    private static void updateInputs(Level world, BlockPos blockPos, RedRouterBlockEntity redrouter) {
+    private static void updateInputs(Level world, BlockPos blockPos, RedRouterBlockEntityI redrouter) {
         for (Map.Entry<String, Integer> entry : redrouter.inputDir.entrySet()) {
             String side = entry.getKey();
             Direction dir = Direction.byName(side).getOpposite();

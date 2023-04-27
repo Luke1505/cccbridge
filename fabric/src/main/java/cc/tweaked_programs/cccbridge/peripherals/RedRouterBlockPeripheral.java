@@ -1,6 +1,6 @@
 package cc.tweaked_programs.cccbridge.peripherals;
 
-import cc.tweaked_programs.cccbridge.blockEntity.RedRouterBlockEntity;
+import cc.tweaked_programs.cccbridge.blockEntity.RedRouterBlockEntityI;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -20,10 +20,10 @@ import java.util.List;
  * @version 1.0
  */
 public class RedRouterBlockPeripheral implements IPeripheral {
-    private final RedRouterBlockEntity redrouter_be;
+    private final RedRouterBlockEntityI redrouter_be;
     private final List<IComputerAccess> pcs = new LinkedList<>();
 
-    public RedRouterBlockPeripheral(RedRouterBlockEntity redrouter_block_entity) {
+    public RedRouterBlockPeripheral(RedRouterBlockEntityI redrouter_block_entity) {
         this.redrouter_be = redrouter_block_entity;
     }
 

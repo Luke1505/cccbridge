@@ -1,8 +1,6 @@
 package cc.tweaked_programs.cccbridge;
 
 import cc.tweaked_programs.cccbridge.blockEntity.IPeripheralBlockEntity;
-import cc.tweaked_programs.cccbridge.peripherals.TrainSignalPeripheral;
-import com.simibubi.create.content.logistics.trains.management.edgePoint.signal.SignalTileEntity;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.IPeripheralProvider;
 import net.minecraft.core.BlockPos;
@@ -18,9 +16,7 @@ public class PeripheralProvider implements IPeripheralProvider {
     @Override
     public LazyOptional<IPeripheral> getPeripheral(@NotNull Level world, @NotNull BlockPos pos, @NotNull Direction side) {
         BlockEntity block = world.getBlockEntity(pos);
-        if (block instanceof SignalTileEntity) {
-            return LazyOptional.of(() -> new TrainSignalPeripheral((SignalTileEntity) block, world));
-        } else if (block instanceof IPeripheralBlockEntity peripheralBlock) {
+        if (block instanceof IPeripheralBlockEntity peripheralBlock) {
             IPeripheral peripheral = peripheralBlock.getPeripheral(side);
             if (peripheral != null)
                 return LazyOptional.of(() -> peripheral);
