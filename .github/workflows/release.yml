@@ -5,202 +5,80 @@ on:
     types: [published]
 
 jobs:
-  Build:
+  BuildAndRelease:
     runs-on: ubuntu-latest
-    
+
+    strategy:
+      matrix:
+        branch:
+          - '1.18.2'
+          - ${{ github.ref }}
+        version:
+          - '1.18.2'
+          - '1.19.2'
+
     outputs:
       ForgeFile: ${{ steps.files.outputs.ForgeFile }}
-      FabricFile: ${{ steps.files.outputs.FabricFile }}
       Version: ${{ steps.files.outputs.Version }}
-      McVersion: S{{ steps.files.outputs.McVersion }}
-      
+      McVersion: S${{ steps.files.outputs.McVersion }}
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ matrix.branch }}
 
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: 17
-        distribution: 'temurin'
-    
-    - name: Build Forge
-      run: |
-        cd ./forge
-        chmod 777 gradlew
-        ./gradlew build
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'temurin'
 
-    - name: Build Fabric
-      run: |
-        cd ./fabric
-        chmod 777 gradlew
-        ./gradlew build
-        
-    - name: Get Filenames
-      id: files
-      run: |
-        cd ./forge
-        MC_VERSION=$(grep -Po 'mc_version=\K.*$' gradle.properties)
-        MOD_VERSION=$(grep -Po 'mod_version=\K.*$' gradle.properties)
-        MODLOADER=$(grep -Po 'modloader=\K.*$' gradle.properties)
-        VERSION=$MC_VERSION-$MOD_VERSION-$MODLOADER
-        echo "Version=$MOD_VERSION" >> $GITHUB_OUTPUT
-        echo "McVersion=$MC_VERSION" >> $GITHUB_OUTPUT
-        echo "ForgeFile=cccbridge-$VERSION.jar" >> $GITHUB_OUTPUT
-        cd ../fabric
-        MC_VERSIONFA=$(grep -Po 'minecraft_version=\K.*$' gradle.properties)
-        MOD_VERSIONFA=$(grep -Po 'mod_version = \K.*$' gradle.properties)
-        MODLOADERFA=$(grep -Po 'modloader = \K.*$' gradle.properties)
-        VERSIONFA=$MC_VERSIONFA-$MOD_VERSIONFA-$MODLOADERFA
-        echo "FabricFile=cccbridge-$VERSIONFA.jar" >> $GITHUB_OUTPUT
-      
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.2
-      with:
-        # Artifact name
-        name: JarFiles
-        path:  |
+      - name: Build Forge
+        run: |
+          cd ./forge
+          chmod 777 gradlew
+          ./gradlew build
+
+      - name: Get Forge Filenames
+        id: files
+        run: |
+          cd ./forge
+          MC_VERSION=$(grep -Po 'mc_version=\K.*$' gradle.properties)
+          MOD_VERSION=$(grep -Po 'mod_version=\K.*$' gradle.properties)
+          MODLOADER=$(grep -Po 'modloader=\K.*$' gradle.properties)
+          VERSION=$MC_VERSION-$MOD_VERSION-$MODLOADER
+          echo "Version=$MOD_VERSION" >> $GITHUB_ENV
+          echo "McVersion=$MC_VERSION" >> $GITHUB_ENV
+          echo "ForgeFile=cccbridge-$VERSION.jar" >> $GITHUB_ENV
+
+      - name: Upload Forge Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ForgeJar_${{ matrix.version }}
+          path: |
             ./forge/build/libs/${{ env.ForgeFile }}
-            ./fabric/build/libs/${{ env.FabricFile }}
 
   Release:
-    needs: Build
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: BuildAndRelease
     runs-on: ubuntu-latest
-
     steps:
-    - name: Create release directory
-      run: mkdir -p release
-      
-    - name: Download files
-      uses: actions/download-artifact@v3.0.2
-      with:
-        name: JarFiles
-        path: release
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Upload Forge Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}/assets{?name,label}
-        asset_path: ./release/forge/build/libs/${{ needs.Build.outputs.ForgeFile }}
-        asset_name: ${{ needs.Build.outputs.ForgeFile }}
-        asset_content_type: application/java-archive
-        
-    - name: Upload Fabric Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}/assets{?name,label}
-        asset_path: ./release/fabric/build/libs/${{ needs.Build.outputs.FabricFile }}
-        asset_name: ${{ needs.Build.outputs.FabricFile }}
-        asset_content_type: application/java-archive
+      - name: Download Forge Artifacts
+        uses: actions/download-artifact@v3.0.2
+        with:
+          name: ForgeJar_${{ matrix.version }}
+          path: release/${{ matrix.version }}
 
-    - name: Upload Forge to CurseForge
-  # You may pin to the exact commit or the version.
-  # uses: itsmeow/curseforge-upload@78269efea1104bd4407d6a2f2b9ffe15bbcdb30d
-      uses: itsmeow/curseforge-upload@3.1.1
-      with:
-    # Token used to authenticate with CurseForge API. Use a repository secret for this.
-        token: ${{ secrets.CURSEFORGE }}
-    # Project id (numerical) to upload file to. You can get the numerical ID from the sidebar on a project page.
-        project_id: 656214
-    # The subdomain of curseforge.com where the upload request will be made. (minecraft, kerbal, etc.)
-        game_endpoint: "minecraft"
-    # The path to the file you want to upload
-        file_path: ./release/forge/build/libs/${{ needs.Build.outputs.ForgeFile }}
-    # The changelog text to put on the file.
-        changelog: ${{ github.event.release.body }}
-    # The type of the changelog. Allowed values: "text", "html" (aka. WYSIWYG), "markdown".
-        changelog_type: "markdown"
-    # The display name for this file. Defaults to the filename.
-        display_name: "v${{ needs.Build.outputs.Version }} forge"
-    # The game version IDs to select on this file. Separate IDs with "," (no quotes). See README for more info.
-        game_versions: ${{ needs.Build.outputs.McVersion }}
-    # The type of this release. Allowed values: "alpha", "beta", "release".
-        release_type: "beta"
-    # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
-        relations: cc-tweaked:requiredDependency,create:requiredDependency
-        
-    - name: Upload Fabric to CurseForge
-  # You may pin to the exact commit or the version.
-  # uses: itsmeow/curseforge-upload@78269efea1104bd4407d6a2f2b9ffe15bbcdb30d
-      uses: itsmeow/curseforge-upload@3.1.1
-      with:
-    # Token used to authenticate with CurseForge API. Use a repository secret for this.
-        token: ${{ secrets.CURSEFORGE }}
-    # Project id (numerical) to upload file to. You can get the numerical ID from the sidebar on a project page.
-        project_id: 656214
-    # The subdomain of curseforge.com where the upload request will be made. (minecraft, kerbal, etc.)
-        game_endpoint: "minecraft"
-    # The path to the file you want to upload
-        file_path: ./release/fabric/build/libs/${{ needs.Build.outputs.FabricFile }}
-    # The changelog text to put on the file.
-        changelog: ${{ github.event.release.body }}
-    # The type of the changelog. Allowed values: "text", "html" (aka. WYSIWYG), "markdown".
-        changelog_type: "markdown"
-    # The display name for this file. Defaults to the filename.
-        display_name: "v${{ needs.Build.outputs.Version }} fabric"
-    # The game version IDs to select on this file. Separate IDs with "," (no quotes). See README for more info.
-        game_versions: ${{ needs.Build.outputs.McVersion }}
-    # The type of this release. Allowed values: "alpha", "beta", "release".
-        release_type: "beta"
-    # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectslug:relationType - Valid relationTypes are: embeddedLibrary, incompatible, optionalDependency, requiredDependency, and tool
-        relations: cc-restitched:requiredDependency,create-fabric:requiredDependency
-
-    - name: Upload Forge to Modrinth
-  # You may pin to the exact commit or the version.
-  # uses: RubixDev/modrinth-upload@d4a88fafa65118be1e486193e2f2ab0d84d00456
-      uses: RubixDev/modrinth-upload@v1.0.0
-      with:
-      # Token used to authenticate with Modrinth API. Use a repository secret for this
-        token: ${{ secrets.MODRINTH }}
-      # The path to the file you want to upload
-        file_path: ./release/forge/build/libs/${{ needs.Build.outputs.ForgeFile }}
-      # The display name for this file
-        name:  "v${{ needs.Build.outputs.Version }} forge"
-      # The version number. Ideally will follow semantic versioning
-        version:  "${{ needs.Build.outputs.Version }}-forge"
-      # The changelog for this version
-        changelog: ${{ github.event.release.body }}
-      # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectId:relationType - Valid relationTypes are: required, optional, incompatible and embedded
-        relations: LNytGWDc:required,gu7yAYhd:required
-      # The game versions to select on this file. Separate with "," (no quotes)
-        game_versions: ${{ needs.Build.outputs.McVersion }}
-      # The type of this release. Allowed values: "alpha", "beta", "release"
-        release_type: "beta"
-      # The mod loaders that this version supports. Separate with "," (no quotes)
-        loaders: forge
-      # Whether the version is featured or not
-        featured: true
-      # Project ID to upload file to. You can get the ID from the sidebar on a project page under "Technical Information"
-        project_id: fXt291FO
-        
-    - name: Upload Fabric to Modrinth
-  # You may pin to the exact commit or the version.
-  # uses: RubixDev/modrinth-upload@d4a88fafa65118be1e486193e2f2ab0d84d00456
-      uses: RubixDev/modrinth-upload@v1.0.0
-      with:
-      # Token used to authenticate with Modrinth API. Use a repository secret for this
-        token: ${{ secrets.MODRINTH }}
-      # The path to the file you want to upload
-        file_path: ./release/fabric/build/libs/${{ needs.Build.outputs.FabricFile }}
-      # The display name for this file
-        name:  "v${{ needs.Build.outputs.Version }} fabric"
-      # The version number. Ideally will follow semantic versioning
-        version:  "${{ needs.Build.outputs.Version }}-fabric"
-      # The changelog for this version
-        changelog: ${{ github.event.release.body }}
-      # List of projects this file is related to and their relation type. Separate with "," (no quotes). Format: projectId:relationType - Valid relationTypes are: required, optional, incompatible and embedded
-        relations: Xbc0uyRg:required,eldBwa5V:required
-      # The game versions to select on this file. Separate with "," (no quotes)
-        game_versions: ${{ needs.Build.outputs.McVersion }}
-      # The type of this release. Allowed values: "alpha", "beta", "release"
-        release_type: "beta"
-      # The mod loaders that this version supports. Separate with "," (no quotes)
-        loaders: fabric
-      # Whether the version is featured or not
-        featured: true
-      # Project ID to upload file to. You can get the ID from the sidebar on a project page under "Technical Information"
-        project_id: fXt291FO
+      - name: Upload Forge Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}/assets{?name,label}
+          asset_path: ./release/${{ matrix.version }}/${{ needs.BuildAndRelease.outputs.ForgeFile }}
+          asset_name: ${{ needs.BuildAndRelease.outputs.ForgeFile }}
+          asset_content_type: application/java-archive
